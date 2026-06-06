@@ -1,4 +1,4 @@
-name: bakery_link
+name: bakkery
 
 description: Bakery Link App
 
@@ -17,6 +17,10 @@ dependencies:
   google_fonts: ^6.2.1
   provider: ^6.1.2
 
+  sqflite: ^2.4.2
+  sqflite_common_ffi: ^2.3.4
+  path: ^1.9.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,6 +29,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
   assets:
     - assets/images/cover.jpeg
     - assets/images/logo.png
