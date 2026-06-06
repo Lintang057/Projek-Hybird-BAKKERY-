@@ -3,8 +3,9 @@
 // ============================
 
 import 'package:flutter/material.dart';
+import '../database/database_helper.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
 
   final Map product;
 
@@ -12,6 +13,15 @@ class ProductDetailPage extends StatelessWidget {
     super.key,
     required this.product,
   });
+
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+
+  String selectedTopping = "";
+  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class ProductDetailPage extends StatelessWidget {
 
             Center(
               child: Text(
-                product["image"],
+                widget.product["image"],
                 style: const TextStyle(
                   fontSize: 120,
                 ),
@@ -40,7 +50,7 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 25),
 
             Text(
-              product["name"],
+              widget.product["name"],
               style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -50,7 +60,7 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
 
             Text(
-              product["price"],
+              widget.product["price"],
               style: const TextStyle(
                 fontSize: 22,
                 color: Colors.pink,
@@ -95,27 +105,122 @@ class ProductDetailPage extends StatelessWidget {
               ],
             ),
 
-            const Spacer(),
+            const SizedBox(height: 30),
 
-            SizedBox(
-              width: double.infinity,
-              height: 55,
+            const Text(
+              "Jumlah Pesanan",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
 
-              child: ElevatedButton(
+            const SizedBox(height: 15),
 
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                IconButton(
+                  onPressed: () {
+                    if (quantity > 1) {
+                      setState(() {
+                        quantity--;
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.remove_circle),
+                  iconSize: 35,
+                  color: Colors.pink,
+                ),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 5,
+                  ),
+                  child: Text(
+                    "$quantity",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
 
-                onPressed: () {},
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      quantity++;
+                    });
+                  },
+                  icon: const Icon(Icons.add_circle),
+                  iconSize: 35,
+                  color: Colors.pink,
+                ),
 
-                child: const Text(
-                  "Tambah Pembelian",
-                  style: TextStyle(fontSize: 18),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            Text(
+              "Total: Rp ${9000 * quantity}",
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
+            ),
+
+            const Spacer(),
+
+            Padding(
+              padding: const EdgeInsets.only(bottom: 70),
+              child: SizedBox(
+                width: double.infinity,
+                height: 55,
+
+                child: ElevatedButton(
+
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+
+                  onPressed: () {
+
+                    if (selectedTopping.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Pilih topping terlebih dahulu",
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Pesanan ditambahkan\n"
+                          "Topping: $selectedTopping\n"
+                          "Jumlah: $quantity\n"
+                          "Total: Rp ${9000 * quantity}",
+                        ),
+                      ),
+                    );
+
+                  },
+
+                  child: const Text(
+                    "Tambah Pembelian",
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             )
@@ -132,28 +237,25 @@ class ProductDetailPage extends StatelessWidget {
 
   Widget buildVariant(String title) {
 
-    return Container(
+    return ChoiceChip(
 
-      padding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 12,
-      ),
+      label: Text(title),
 
-      decoration: BoxDecoration(
+      selected: selectedTopping == title,
 
-        color: Colors.pink.shade50,
+      onSelected: (value) {
+        setState(() {
+          selectedTopping = title;
+        });
+      },
 
+      selectedColor: Colors.pink.shade200,
+      backgroundColor: Colors.pink.shade50,
+
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-
-        border: Border.all(
+        side: BorderSide(
           color: Colors.pink.shade200,
-        ),
-      ),
-
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

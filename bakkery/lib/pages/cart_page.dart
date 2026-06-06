@@ -3,6 +3,7 @@
 // ============================
 
 import 'package:flutter/material.dart';
+import '../database/database_helper.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
