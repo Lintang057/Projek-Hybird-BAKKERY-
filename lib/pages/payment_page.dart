@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import '../data/history_data.dart';
+import '../database/database_helper.dart';
+import 'history_page.dart';
+import 'qr_page.dart';
+>>>>>>> 7e480cc (updategit branch -M main)
 
 class PaymentPage extends StatefulWidget {
   final List<Map<String, dynamic>> items;
@@ -16,6 +23,48 @@ class _PaymentPageState extends State<PaymentPage> {
   String selectedPayment = "";
 
   @override
+  Widget buildPaymentOption(String title, IconData icon, Color color) {
+    bool isSelected = selectedPayment == title;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedPayment = title;
+        });
+
+        Navigator.pop(context);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Dipilih: $title")),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.pink.shade50 : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.pink : Colors.grey.shade300,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: Colors.pink),
+          ],
+        ),
+      ),
+    );
+  }
   Widget build(BuildContext context) {
     int total = 0;
 
@@ -24,6 +73,19 @@ class _PaymentPageState extends State<PaymentPage> {
           (item["qty"] as num).toInt();
     }
 
+    Widget _sectionTitle(String title) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
+        ),
+      );
+    }
     Widget paymentItem(String id, String title, IconData icon, Color color) {
       bool isSelected = selectedPayment == id;
 
@@ -129,10 +191,18 @@ class _PaymentPageState extends State<PaymentPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+<<<<<<< HEAD
 
                   const Text(
                     "Metode Pembayaran:",
                     style: TextStyle(fontWeight: FontWeight.bold),
+=======
+                  Text(
+                    selectedPayment.isEmpty
+                        ? "Metode Pembayaran: (belum dipilih)"
+                        : "Metode: $selectedPayment",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+>>>>>>> 7e480cc (updategit branch -M main)
                   ),
 
                   GestureDetector(
@@ -140,6 +210,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+<<<<<<< HEAD
                         builder: (context) {
                           return Padding(
                             padding: const EdgeInsets.all(20),
@@ -194,6 +265,58 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ),
                               ],
                             ),
+=======
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (context) {
+                          return DraggableScrollableSheet(
+                            expand: false,
+                            initialChildSize: 0.7,
+                            minChildSize: 0.5,
+                            maxChildSize: 0.9,
+                            builder: (context, scrollController) {
+                              return Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: ListView(
+                                  controller: scrollController,
+                                  children: [
+
+                                    const Center(
+                                      child: Text(
+                                        "Pilih Metode Pembayaran",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 20),
+
+                                    _sectionTitle("E-Wallet"),
+                                    buildPaymentOption("GoPay", Icons.account_balance_wallet, Colors.green),
+                                    buildPaymentOption("ShopeePay", Icons.payment, Colors.orange),
+                                    buildPaymentOption("OVO", Icons.account_balance, Colors.purple),
+                                    buildPaymentOption("DANA", Icons.wallet, Colors.blue),
+                                    buildPaymentOption("LinkAja", Icons.wallet, Colors.red),
+
+                                    const SizedBox(height: 20),
+
+                                    _sectionTitle("Bank Transfer"),
+                                    buildPaymentOption("BCA", Icons.account_balance, Colors.blue),
+                                    buildPaymentOption("BRI", Icons.account_balance, Colors.blue),
+                                    buildPaymentOption("BNI", Icons.account_balance, Colors.orange),
+                                    buildPaymentOption("Mandiri", Icons.account_balance, Colors.yellow),
+
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              );
+                            },
+>>>>>>> 7e480cc (updategit branch -M main)
                           );
                         },
                       );
@@ -307,6 +430,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
 
+<<<<<<< HEAD
               const SizedBox(height: 20),
 
               // ORDER NOW
@@ -342,6 +466,45 @@ class _PaymentPageState extends State<PaymentPage> {
                       "Order Now",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
+=======
+              // ORDER BUTTON (SUDAH FIX)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(15),
+                    backgroundColor: Colors.pink,
+                  ),
+                  onPressed: () async {
+                    if (selectedPayment.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Pilih metode pembayaran dulu")),
+                      );
+                      return;
+                    }
+
+                    for (var item in widget.items) {
+                      await DatabaseHelper.instance.insertHistory({
+                        "productName": item["name"],
+                        "price": item["price"].toString(),
+                        "image": item["emoji"],
+                        "orderDate": DateTime.now().toString(),
+                      });
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Pesanan berhasil disimpan")),
+                    );
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HistoryPage()),
+                    );
+                  },
+                  child: const Text(
+                    "ORDER NOW",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+>>>>>>> 7e480cc (updategit branch -M main)
                   ),
                 ),
               ),

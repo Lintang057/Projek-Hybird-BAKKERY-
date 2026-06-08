@@ -1,11 +1,6 @@
-// ============================
-// lib/pages/product_detail_page.dart
-// ============================
-
 import 'package:flutter/material.dart';
 
 class ProductDetailPage extends StatefulWidget {
-
   final Map product;
 
   const ProductDetailPage({
@@ -18,7 +13,6 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-
   String selectedTopping = "";
   int quantity = 1;
 
@@ -35,9 +29,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       appBar: AppBar(),
 
       body: SingleChildScrollView(
@@ -46,15 +38,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
 
               Center(
                 child: Text(
                   widget.product["image"],
-                  style: const TextStyle(
-                    fontSize: 120,
-                  ),
+                  style: const TextStyle(fontSize: 120),
                 ),
               ),
 
@@ -83,9 +72,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
               const Text(
                 "Donat klasik yang lembut dan empuk. Cocok dinikmati kapan saja!",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
               ),
 
               const SizedBox(height: 30),
@@ -103,16 +89,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Wrap(
                 spacing: 12,
                 runSpacing: 12,
-
                 children: [
-
-                  buildVariant("Dark Chocolate"),
-                  buildVariant("Keju"),
-                  buildVariant("Matcha"),
-                  buildVariant("Strawberry"),
-                  buildVariant("Tiramisu"),
-                  buildVariant("Oreo Crunch"),
-
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: (widget.product["toppings"] as List)
+                        .map((t) => buildVariant(t))
+                        .toList(),
+                  ),
                 ],
               ),
 
@@ -131,55 +115,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   IconButton(
                     onPressed: () {
                       if (quantity > 1) {
-                        setState(() {
-                          quantity--;
-                        });
+                        setState(() => quantity--);
                       }
                     },
                     icon: const Icon(Icons.remove_circle),
-                    iconSize: 35,
                     color: Colors.pink,
+                    iconSize: 35,
                   ),
 
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    child: Text(
-                      "$quantity",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  Text(
+                    "$quantity",
+                    style: const TextStyle(fontSize: 24),
                   ),
 
                   IconButton(
                     onPressed: () {
-                      setState(() {
-                        quantity++;
-                      });
+                      setState(() => quantity++);
                     },
                     icon: const Icon(Icons.add_circle),
-                    iconSize: 35,
                     color: Colors.pink,
+                    iconSize: 35,
                   ),
-
                 ],
               ),
 
               const SizedBox(height: 20),
 
               Text(
-                "Total: Rp ${(price * quantity).toString().replaceAllMapped(
-                  RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'),
-                  (Match m) => '${m[1]}.',
-                )}",
+                "Total: Rp ${price * quantity}",
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -208,26 +174,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     if (selectedTopping.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                            "Pilih topping terlebih dahulu",
-                          ),
+                          content: Text("Pilih topping terlebih dahulu"),
                         ),
                       );
                       return;
                     }
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Pesanan ditambahkan\n"
-                          "Produk: ${widget.product["name"]}\n"
-                          "Topping: $selectedTopping\n"
-                          "Jumlah: $quantity\n"
-                          "Total: Rp ${price * quantity}",
+                    bool exists = false;
+
+<<<<<<< HEAD
+=======
+                    for (var cartItem in CartData.items) {
+                      if (cartItem["name"] == widget.product["name"] &&
+                          cartItem["topping"] == selectedTopping) {
+                        cartItem["qty"] += quantity;
+                        exists = true;
+                        break;
+                      }
+                    }
+
+                    if (!exists) {
+                      CartData.items.add({
+                        "name": widget.product["name"],
+                        "topping": selectedTopping,
+                        "price": price,
+                        "qty": quantity,
+                        "emoji": widget.product["image"],
+                      });
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => KeranjangPage(
+                          cartItems: CartData.items,
                         ),
                       ),
                     );
-
+>>>>>>> 7e480cc (updategit branch -M main)
                   },
 
                   child: const Text(
@@ -236,9 +220,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 30),
-
             ],
           ),
         ),
@@ -246,32 +227,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  // ============================
-  // WIDGET VARIAN
-  // ============================
-
   Widget buildVariant(String title) {
-
     return ChoiceChip(
-
       label: Text(title),
-
       selected: selectedTopping == title,
-
       onSelected: (value) {
-        setState(() {
-          selectedTopping = title;
-        });
+        setState(() => selectedTopping = title);
       },
-
       selectedColor: Colors.pink.shade200,
       backgroundColor: Colors.pink.shade50,
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(
-          color: Colors.pink.shade200,
-        ),
       ),
     );
   }

@@ -49,6 +49,7 @@ class _KeranjangPageState extends State<KeranjangPage> {
           },
         ),
         centerTitle: true,
+<<<<<<< HEAD
         title: const Text(
           "Keranjang",
           style: TextStyle(
@@ -59,6 +60,11 @@ class _KeranjangPageState extends State<KeranjangPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
+=======
+        backgroundColor:
+            Colors.pink,
+        foregroundColor: Colors.white,
+>>>>>>> 7e480cc (updategit branch -M main)
       ),
 
       body: ListView.builder(
