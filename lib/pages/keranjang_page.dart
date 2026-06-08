@@ -42,7 +42,7 @@ class _KeranjangPageState extends State<KeranjangPage> {
         title: const Text("Pembayaran"),
         centerTitle: true,
         backgroundColor:
-            const Color.fromARGB(255, 223, 136, 165),
+            Colors.pink,
         foregroundColor: Colors.white,
       ),
 
