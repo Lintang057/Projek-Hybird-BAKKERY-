@@ -3,11 +3,13 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'history_page.dart';
 
 class QRPage extends StatelessWidget {
+  final List<Map<String, dynamic>> items;
   final String paymentMethod;
   final int total;
 
   const QRPage({
     super.key,
+    required this.items,
     required this.paymentMethod,
     required this.total,
   });
@@ -59,7 +61,7 @@ class QRPage extends StatelessWidget {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const HistoryPage(),
+                    builder: (_) => const HistoryPage()
                   ),
                   (route) => false,
                 );

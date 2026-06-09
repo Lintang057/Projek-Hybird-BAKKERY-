@@ -19,7 +19,6 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String selectedPayment = "";
 
-  @override
   Widget buildPaymentOption(String title, IconData icon, Color color) {
     bool isSelected = selectedPayment == title;
 
@@ -232,8 +231,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                     buildPaymentOption("GoPay", Icons.account_balance_wallet, Colors.green),
                                     buildPaymentOption("ShopeePay", Icons.payment, Colors.orange),
                                     buildPaymentOption("OVO", Icons.account_balance, Colors.purple),
-                                    buildPaymentOption("DANA", Icons.wallet, Colors.blue),
-                                    buildPaymentOption("LinkAja", Icons.wallet, Colors.red),
+                                    buildPaymentOption("DANA", Icons.account_balance_wallet, Colors.blue),
+                                    buildPaymentOption("LinkAja", Icons.account_balance_wallet, Colors.red),
 
                                     const SizedBox(height: 20),
 
@@ -385,14 +384,20 @@ class _PaymentPageState extends State<PaymentPage> {
                         "orderDate": DateTime.now().toString(),
                       });
                     }
-
+                    Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Pesanan berhasil disimpan")),
                     );
 
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const HistoryPage()),
+                      MaterialPageRoute(
+                        builder: (_) => QRPage(
+                          items: widget.items,
+                          paymentMethod: selectedPayment,
+                          total: total,
+                        ),
+                      ),
                     );
                   },
                   child: const Text(

@@ -3,7 +3,7 @@ import 'keranjang_page.dart';
 import '../data/cart_data.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  final Map product;
+  final Map<String, dynamic> product;
 
   const ProductDetailPage({
     super.key,
@@ -19,7 +19,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantity = 1;
 
   int get price {
-    String priceString = widget.product["price"];
+    String priceString = widget.product["price"].toString();
 
     priceString = priceString
         .replaceAll("Rp", "")
@@ -31,6 +31,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final toppings = widget.product["toppings"] ?? [];
+
     return Scaffold(
       appBar: AppBar(),
 
@@ -70,12 +72,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
               ),
 
-              const SizedBox(height: 20),
-
-              const Text(
-                "Donat klasik yang lembut dan empuk. Cocok dinikmati kapan saja!",
-              ),
-
               const SizedBox(height: 30),
 
               const Text(
@@ -91,28 +87,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Wrap(
                 spacing: 12,
                 runSpacing: 12,
-                children: [
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: (widget.product["toppings"] as List)
-                        .map((t) => buildVariant(t))
-                        .toList(),
-                  ),
-                ],
+                children: toppings
+                    .map<Widget>((t) => buildVariant(t.toString()))
+                    .toList(),
               ),
 
               const SizedBox(height: 30),
-
-              const Text(
-                "Jumlah Pesanan",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 15),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -128,10 +108,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     iconSize: 35,
                   ),
 
-                  Text(
-                    "$quantity",
-                    style: const TextStyle(fontSize: 24),
-                  ),
+                  Text("$quantity",
+                      style: const TextStyle(fontSize: 24)),
 
                   IconButton(
                     onPressed: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import 'product_detail_page.dart';
+import 'home_page.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -25,74 +26,47 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
+  void goHome() {
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadHistory();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Riwayat Pesanan")),
+      appBar: AppBar(
+        title: const Text("Riwayat Pesanan"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: goHome,
+          )
+        ],
+      ),
+
       body: history.isEmpty
-          ? const Center(child: Text("Belum ada pesanan"))
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Belum ada pesanan"),
+                  const SizedBox(height: 10),
+
+                  ElevatedButton(
+                    onPressed: goHome,
+                    child: const Text("Kembali ke Home"),
+                  ),
+                ],
+              ),
+            )
           : ListView.builder(
               itemCount: history.length,
               itemBuilder: (context, index) {
                 final item = history[index];
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(item["image"], style: const TextStyle(fontSize: 30)),
-                      const SizedBox(width: 10),
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item["productName"],
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(item["orderDate"]),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  Column(
-                    children: [
-
-                      Text("Rp ${item["price"]}"),
-
-                      const SizedBox(height: 8),
-
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pink,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ProductDetailPage(
-                                product: {
-                                  "name": item["productName"],
-                                  "price": item["price"],
-                                  "image": item["image"],
-                                },
-                              ),
-                            ),
-                          );
-                        },
-
-                        child: const Text(
-                          "Beli Lagi",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
 
                 return Container(
                   margin: const EdgeInsets.all(10),
@@ -124,7 +98,37 @@ class _HistoryPageState extends State<HistoryPage> {
                         ),
                       ),
 
-                      Text("Rp ${item["price"]}"),
+                      Column(
+                        children: [
+                          Text("Rp ${item["price"]}"),
+                          const SizedBox(height: 8),
+
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.pink,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ProductDetailPage(
+                                    product: {
+                                      "name": item["productName"],
+                                      "price": item["price"],
+                                      "image": item["image"],
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Beli Lagi",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );
