@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'history_page.dart';
+import '../data/user_session.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -38,9 +39,9 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            const Text(
-              "User Bakery",
-              style: TextStyle(
+            Text(
+              UserSession.username,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -48,13 +49,12 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 5),
 
-            const Text(
-              "user@email.com",
-              style: TextStyle(
+            Text(
+              UserSession.email,
+              style: const TextStyle(
                 color: Colors.grey,
               ),
             ),
-
             const SizedBox(height: 35),
 
             // ================= MENU

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import 'product_detail_page.dart';
-import 'home_page.dart';
+import '../widgets/bottom_navbar.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -26,9 +26,15 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  void goHome() {
-    Navigator.popUntil(context, (route) => route.isFirst);
-  }
+void goHome() {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (_) => const BottomNavbar(),
+    ),
+    (route) => false,
+  );
+}
 
   @override
   void didChangeDependencies() {

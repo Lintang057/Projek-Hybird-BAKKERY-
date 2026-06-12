@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import '../database/database_helper.dart';
 import '../widgets/bottom_navbar.dart';
+import "../data/user_session.dart";
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/';
@@ -43,6 +44,14 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       if (user.isNotEmpty) {
+        final currentUser = user.first;
+
+        UserSession.username =
+            currentUser['username'].toString();
+
+        UserSession.email =
+            currentUser['email'].toString();
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
