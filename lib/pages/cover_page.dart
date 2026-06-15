@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import '../database/database_helper.dart';
 import 'login_page.dart';
 
-class CoverPage extends StatelessWidget {
+class CoverPage extends StatefulWidget {
   const CoverPage({super.key});
+
+  @override
+  State<CoverPage> createState() => _CoverPageState();
+}
+
+class _CoverPageState extends State<CoverPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    DatabaseHelper.instance.printDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +23,6 @@ class CoverPage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-
           Image.asset(
             'assets/images/cover.jpeg',
             fit: BoxFit.cover,
@@ -19,14 +31,12 @@ class CoverPage extends StatelessWidget {
           Container(
             color: Colors.black.withValues(alpha: 0.5),
           ),
-          
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               const Spacer(),
 
-              // LOGO
               Image.asset(
                 'assets/images/logo.png',
                 height: 150,
@@ -62,7 +72,8 @@ class CoverPage extends StatelessWidget {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 218, 138, 85),
+                      backgroundColor:
+                          const Color.fromARGB(255, 218, 138, 85),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -72,17 +83,18 @@ class CoverPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text("Get Started",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18),
+                    child: const Text(
+                      "Get Started",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
+                  ),
+                ),
               ),
-              ),
-              ),
-
             ],
-          )
+          ),
         ],
       ),
     );

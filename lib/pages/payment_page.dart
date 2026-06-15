@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/history_data.dart';
 import '../database/database_helper.dart';
-import 'history_page.dart';
 import 'qr_page.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -61,6 +59,8 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
   }
+
+  @override
   Widget build(BuildContext context) {
     int total = 0;
 
@@ -68,7 +68,7 @@ class _PaymentPageState extends State<PaymentPage> {
       total += (item["price"] as num).toInt() *
           (item["qty"] as num).toInt();
     }
-
+    @override
     Widget _sectionTitle(String title) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 10),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'success_page.dart';
+import 'login_page.dart';
 import '../database/database_helper.dart';
 
 class SignupPage extends StatefulWidget {
@@ -76,7 +76,7 @@ if (!emailRegex.hasMatch(email)) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const SuccessPage(),
+        builder: (_) => const LoginPage(),
       ),
     );
   }

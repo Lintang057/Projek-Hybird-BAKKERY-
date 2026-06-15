@@ -150,19 +150,6 @@ class DatabaseHelper {
     return await db.insert('users', user);
   }
 
-  Future<List<Map<String, dynamic>>> login(
-    String email,
-    String password,
-  ) async {
-    final db = await database;
-
-    return await db.query(
-      'users',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
-  }
-
   Future<List<Map<String, dynamic>>> loginUser(
     String email,
     String password,
@@ -211,6 +198,22 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getUsers() async {
     final db = await database;
     return await db.query('users');
+  }
+
+  Future<void> printDatabase() async {
+    final db = await database;
+
+    print('\n===== USERS =====');
+    print(await db.query('users'));
+
+    print('\n===== PRODUCTS =====');
+    print(await db.query('products'));
+
+    print('\n===== CART =====');
+    print(await db.query('cart'));
+
+    print('\n===== HISTORY =====');
+    print(await db.query('history'));
   }
 
   Future<int> deleteUser(int id) async {
